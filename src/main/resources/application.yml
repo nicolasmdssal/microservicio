@@ -3,9 +3,9 @@ spring:
     name: reactive-postgres
 
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/reactive_db
-    username: postgres
-    password: 1234
+    url: ${SPRING_R2DBC_URL}
+    username: ${SPRING_R2DBC_USERNAME}
+    password: ${SPRING_R2DBC_PASSWORD}
 
   sql:
     init:
