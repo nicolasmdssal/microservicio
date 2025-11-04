@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: reactive_postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: reactive_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - reactive-net
+
+  app:
+    build:
+      context: .
+    container_name: reactive_postgres_app
+    ports:
+      - "8033:8033"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/reactive_db
+      SPRING_R2DBC_USERNAME: postgres
+      SPRING_R2DBC_PASSWORD: 1234
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - reactive-net
+
+volumes:
+  pgdata:
+
+networks:
+  reactive-net:
+    driver: bridge
